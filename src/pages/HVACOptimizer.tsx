@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout } from "@/components/neurawatt/Layout";
 import { 
   Cpu, 
@@ -9,20 +8,98 @@ import {
   Users,
   Zap,
   Wind,
-  ToggleLeft
+  ToggleLeft,
+  ExternalLink,
+  Loader2
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
+import { 
+  checkStreamlitStatus, 
+  startStreamlit, 
+  StreamlitStatus 
+} from "@/services/streamlitService";
 
 const HVACOptimizer = () => {
   const [temperature, setTemperature] = useState([22]); // 22°C
   const [fanSpeed, setFanSpeed] = useState([60]); // 60%
   const [energySaving, setEnergySaving] = useState([70]); // 70% priority to energy saving vs comfort
   const [autoMode, setAutoMode] = useState(true);
+  const [streamlitStatus, setStreamlitStatus] = useState<StreamlitStatus>({ running: false });
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
   
+  // Check if Streamlit is running when the component mounts
+  useEffect(() => {
+    const fetchStreamlitStatus = async () => {
+      try {
+        const status = await checkStreamlitStatus();
+        setStreamlitStatus(status);
+      } catch (error) {
+        console.error("Failed to check Streamlit status:", error);
+      }
+    };
+    
+    fetchStreamlitStatus();
+    
+    // Set up polling to periodically check status
+    const intervalId = setInterval(fetchStreamlitStatus, 10000);
+    
+    // Clean up on unmount
+    return () => clearInterval(intervalId);
+  }, []);
+  
+  const launchStreamlitDashboard = async () => {
+    setIsLoading(true);
+    
+    try {
+      toast({
+        title: "Starting HVAC Dashboard",
+        description: "Please wait while we launch the Streamlit dashboard...",
+      });
+      
+      const result = await startStreamlit('hvac_dashboard', 'dashboard');
+      
+      if (result.success) {
+        setStreamlitStatus({
+          running: true,
+          url: result.url,
+          pid: result.pid
+        });
+        
+        toast({
+          title: "Dashboard Ready",
+          description: "The HVAC optimization dashboard is now running!",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: result.message || "Failed to launch the HVAC dashboard.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Failed to launch Streamlit dashboard:", error);
+      toast({
+        title: "Error",
+        description: "Failed to launch the HVAC dashboard. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const openStreamlit = () => {
+    if (streamlitStatus.url) {
+      window.open(streamlitStatus.url, "_blank");
+    }
+  };
+
   return (
     <Layout>
       <div className="px-4 py-6 md:px-6 md:py-8">
@@ -42,6 +119,77 @@ const HVACOptimizer = () => {
               </Button>
             </div>
           </div>
+          
+          {/* Streamlit Dashboard Section */}
+          <Card className="border-neurawatt-purple">
+            <CardHeader className="bg-neurawatt-purple/5">
+              <CardTitle className="flex items-center">
+                <Cpu className="mr-2 h-5 w-5 text-neurawatt-purple" />
+                Smart HVAC Dashboard
+              </CardTitle>
+              <CardDescription>
+                Interactive visualization and control of your building's HVAC system
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6">
+              {streamlitStatus.running ? (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-medium">Dashboard Status: <span className="text-green-600">Running</span></h3>
+                      <p className="text-sm text-muted-foreground">The interactive Python-based HVAC dashboard is active</p>
+                    </div>
+                    <Button 
+                      onClick={openStreamlit}
+                      className="bg-neurawatt-purple hover:bg-neurawatt-purple/90 text-white"
+                    >
+                      <ExternalLink className="mr-2 h-4 w-4" />
+                      Open Dashboard
+                    </Button>
+                  </div>
+                  
+                  <div className="border rounded-lg p-4 bg-gray-50">
+                    <h4 className="font-medium mb-2">About the HVAC Dashboard</h4>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      The Smart HVAC Dashboard provides real-time monitoring and optimization 
+                      of your building's heating, ventilation, and air conditioning systems. 
+                      It features:
+                    </p>
+                    <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
+                      <li>Real-time occupancy detection via cameras</li>
+                      <li>Environmental data tracking</li>
+                      <li>AI-powered HVAC optimization</li>
+                      <li>Historical performance analysis</li>
+                      <li>Energy usage visualization</li>
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Cpu className="mx-auto h-12 w-12 text-neurawatt-purple/30 mb-4" />
+                  <h3 className="text-xl font-medium mb-2">Launch Interactive Dashboard</h3>
+                  <p className="text-muted-foreground max-w-md mx-auto mb-6">
+                    Start the Python-based Smart HVAC Dashboard for advanced visualization 
+                    and control of your building's HVAC systems.
+                  </p>
+                  <Button 
+                    onClick={launchStreamlitDashboard}
+                    className="bg-neurawatt-purple hover:bg-neurawatt-purple/90 text-white"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Launching...
+                      </>
+                    ) : (
+                      "Launch Dashboard"
+                    )}
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
           
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             <div className="md:col-span-4">
