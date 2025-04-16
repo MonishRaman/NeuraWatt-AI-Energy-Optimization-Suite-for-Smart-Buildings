@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,7 +15,7 @@ export const Navbar = () => {
             NeuraWatt
           </span>
         </div>
-        
+
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-6">
           <a href="#features" className="text-neurawatt-gray-dark hover:text-neurawatt-purple transition-colors">Features</a>
@@ -22,15 +23,17 @@ export const Navbar = () => {
           <a href="#how-it-works" className="text-neurawatt-gray-dark hover:text-neurawatt-purple transition-colors">How It Works</a>
           <a href="#faq" className="text-neurawatt-gray-dark hover:text-neurawatt-purple transition-colors">FAQ</a>
         </div>
-        
+
         <div className="hidden md:block">
           <Button className="neurawatt-btn-primary">
-            Request Demo
+            <Link to="/login">
+              Login
+            </Link>
           </Button>
         </div>
-        
+
         {/* Mobile menu button */}
-        <button 
+        <button
           className="md:hidden text-neurawatt-gray-dark"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
@@ -45,7 +48,7 @@ export const Navbar = () => {
           )}
         </button>
       </div>
-      
+
       {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-white py-4 px-4 shadow-inner">

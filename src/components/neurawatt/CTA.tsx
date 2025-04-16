@@ -33,12 +33,12 @@ export const CTA = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button className="bg-white text-neurawatt-purple hover:bg-neurawatt-gray-light" asChild>
                 <Link to="/login">
-                  Schedule a Demo
+                  Login
                 </Link>
               </Button>
               <Button className="bg-transparent border border-white hover:bg-white hover:bg-opacity-10" asChild>
                 <Link to="/login">
-                  Contact Sales
+                  Signup
                 </Link>
               </Button>
             </div>
