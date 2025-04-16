@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,6 +14,9 @@ import HVACOptimizer from "./pages/HVACOptimizer";
 import Reports from "./pages/Reports";
 import AdminPanel from "./pages/AdminPanel";
 import Leaderboard from "./pages/Leaderboard";
+import Analytics from "./pages/Analytics";
+import GreenScore from "./pages/GreenScore";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +37,9 @@ const App = () => (
           <Route path="/reports" element={<Reports />} />
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/green-score" element={<GreenScore />} />
+          <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
