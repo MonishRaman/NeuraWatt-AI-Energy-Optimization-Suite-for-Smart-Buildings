@@ -68,30 +68,30 @@ export const RoomSelector = ({ selectedRoomType, onSelect }: RoomSelectorProps) 
   
   return (
     <div className="space-y-3">
-      {roomTypes.map((roomType) => (
-        <div
-          key={roomType.id}
-          className={`p-3 rounded-md cursor-pointer border transition-all ${
-            selectedRoomType?.id === roomType.id 
-              ? 'border-neurawatt-purple bg-neurawatt-purple bg-opacity-5' 
-              : 'border-gray-200 hover:border-neurawatt-purple-light'
-          }`}
-          onClick={() => onSelect(roomType)}
+  {roomTypes.map((roomType) => (
+    <div
+      key={roomType.id}
+      className={`p-3 rounded-md cursor-pointer border transition-all ${
+        selectedRoomType?.id === roomType.id 
+          ? 'border-neurawatt-purple bg-neurawatt-purple bg-opacity-5' 
+          : 'border-gray-200 hover:border-neurawatt-purple-light'
+      }`}
+      onClick={() => onSelect(roomType)}
+    >
+      <div className="flex items-center gap-4">
+        <div 
+          className="w-12 h-12 rounded flex items-center justify-center text-3xl" 
+          style={{ backgroundColor: roomType.color }}
         >
-          <div className="flex items-center gap-3">
-            <div 
-              className="w-8 h-8 rounded flex items-center justify-center text-lg" 
-              style={{ backgroundColor: roomType.color }}
-            >
-              {roomType.icon}
-            </div>
-            <div>
-              <div className="font-medium">{roomType.name}</div>
-              <div className="text-xs text-muted-foreground">{roomType.usagePattern}</div>
-            </div>
-          </div>
+          {roomType.icon}
         </div>
-      ))}
+        <div>
+          <div className="font-medium">{roomType.name}</div>
+          <div className="text-xs text-muted-foreground">{roomType.usagePattern}</div>
+        </div>
+      </div>
     </div>
+  ))}
+</div>
   );
 };
