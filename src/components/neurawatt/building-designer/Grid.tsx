@@ -47,7 +47,7 @@ export const Grid = ({ selectedRoomType, rows = 10, cols = 10 }: GridProps) => {
             {row.map((cell, colIndex) => (
               <div
                 key={cell.id}
-                className={`w-20 h-20 border border-gray-200 cursor-pointer transition-colors flex items-center justify-center text-xs`}
+                className={`w-20 h-20 border border-gray-200 cursor-pointer transition-colors flex items-center justify-center text-3xl`}
                 style={{ backgroundColor: cell.roomType?.color || "white" }}
                 onClick={() => handleCellClick(rowIndex, colIndex)}
               >
