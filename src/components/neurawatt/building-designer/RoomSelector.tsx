@@ -64,6 +64,31 @@ export const RoomSelector = ({ selectedRoomType, onSelect }: RoomSelectorProps) 
       usagePattern: "24/7",
       averageOccupancy: 5
     },
+    {
+      id: "gaming",
+      name: "Gaming Room",
+      color: "#FEC6A1",
+      icon: "🎮",
+      usagePattern: "8am-10pm daily",
+      averageOccupancy: 5
+    },
+    {
+      id: "medical",
+      name: "Medical Room",
+      color: "#FEC6A1",
+      icon: "🩺",
+      usagePattern: "24/7",
+      averageOccupancy: 5
+    },
+   
+    {
+      id: "fitness",
+      name: "Fitness Center",
+      color: "#FEC6A1",
+      icon: "🚴‍♀️",
+      usagePattern: "8am-11pm daily",
+      averageOccupancy: 5
+    },
   ];
   
   return (
