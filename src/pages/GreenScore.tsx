@@ -8,7 +8,8 @@ const GreenScore = () => {
     <Layout>
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-6">Green Score</h1>
-        
+
+        {/* First row of metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card>
             <CardHeader>
@@ -50,6 +51,36 @@ const GreenScore = () => {
           </Card>
         </div>
 
+        {/* Second row of additional metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Leaf className="h-5 w-5 text-emerald-500" />
+                Carbon Footprint Saved
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-4xl font-bold text-center my-4">320 kgCO₂</div>
+              <Progress value={64} className="h-2" />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Award className="h-5 w-5 text-purple-500" />
+                HVAC Efficiency
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-4xl font-bold text-center my-4">78%</div>
+              <Progress value={78} className="h-2" />
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Improvement Suggestions */}
         <Card className="mt-6">
           <CardHeader>
             <CardTitle>Improvement Suggestions</CardTitle>
@@ -67,6 +98,10 @@ const GreenScore = () => {
               <li className="flex items-start gap-2">
                 <span className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600">3</span>
                 <span>Upgrade to energy-efficient lighting systems</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600">4</span>
+                <span>Schedule HVAC maintenance before peak summer usage</span>
               </li>
             </ul>
           </CardContent>
